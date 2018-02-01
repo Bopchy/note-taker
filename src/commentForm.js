@@ -11,7 +11,7 @@ class CommentForm extends Component {
     this.handleTextChange = this.handleTextChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  
+
   static propTypes = {
     onCommentSubmit: PropTypes.func.isRequired,
   }
@@ -40,17 +40,21 @@ class CommentForm extends Component {
     return(
       <form style={style.commentForm} onSubmit={this.handleSubmit}>
         <input 
+          id="author"
           type='text' 
           placeholder='Your name goes here' 
           style={style.commentFormAuthor} 
           value={this.state.author} 
           onChange={this.handleAuthorChange} />
-        <input
-          type='text'
-          placeholder='Comment goes here'
-          style={style.commentFormText}
-          value={this.state.text}
-          onChange={this.state.handleTextChange} />
+        
+        <input 
+          id="comment"
+          type='text' 
+          placeholder='Your comment goes here' 
+          style={style.commentFormText} 
+          value={this.state.text} 
+          onChange={this.handleTextChange} />
+        
         <input type='submit' style={style.commentFormPost} value='Post' />
       </form>
     );

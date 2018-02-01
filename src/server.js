@@ -25,13 +25,9 @@ app.use(bodyParser.json());
 // (to prevent errors from Cross Origin Resource Shairing)
 app.use(function(req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS, POST, PUT, DELETE'); // Must I set options???
-  // res.setHeader(
-  //   'Access-Control-Allow-Headers',
-  //   `Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, Content-Type,
-  //   Access-Control-Request-Method, Access-Control-Request-Headers`,
-  // );
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT,DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
   res.setHeader('Cache-Control', 'no-cache') // removes caching, so you get most recent comments
   next();
 })
@@ -55,9 +51,30 @@ router.route('/comments')
     comment.text = req.body.text;
     comment.save(function(err) {
       if(err) res.send(err);
-      res.json({ message: 'Comment successfull added! '});
+      res.json({ message: 'Comment successfully added! '});
     });
   });
+
+router.route('/comments/:commentId')
+  .put(function(req, res) {
+    Comment.findById(req.params.commentId, function(err, comment) {
+      if(err) res.send (err);
+      (req.body.author) ? comment.author = req.body.author : null;
+      (req.body.text) ? comment.text = req.body.text : null;
+      // saving updates
+      comment.save(function(err) {
+        if(err) res.send(err);
+        res.json({ message: 'Comment successfully updated! '});
+      });
+    })
+  })
+
+  .delete(function(req, res) {
+    Comment.remove({ _id: req.params.commentId }, function(err, comment){
+      if(err) res.send(err);
+      res.json({ message: 'Comment successfully deleted! '});
+    })
+  })
 
 // So that the router config is used when you call /api 
 app.use('/api', router);

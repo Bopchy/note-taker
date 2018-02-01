@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 
 import CommentList from './commentList';
 import CommentForm from './commentForm';
-import Data from './data';
 
 import style from './styles';
 
@@ -14,6 +13,8 @@ class CommentBox extends Component {
     this.state = { data: [] };
     this.loadCommentsFromServer = this.loadCommentsFromServer.bind(this);
     this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
+    this.handleUpdate = this.handleUpdate.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
   
   static propTypes = {
@@ -32,12 +33,25 @@ class CommentBox extends Component {
     this.setState({ data: newComments });
 
     axios.post(this.props.url, comment)
-      .then(res => { 
-        this.setState({ data: res }); 
-      })
       .catch(err => { 
         console.log(err);
         this.setState({ data: comments });
+      })
+  }
+
+  handleUpdate (id, comment) {
+    axios.put(`${this.props.url}/${id}`, comment)
+      .then(console.log('Update---------->>>',`${this.props.url}/${id}`))
+      .catch(err => { 
+        console.log(err);
+      })
+  }
+
+  handleDelete (id) {
+    console.log('id: ', id);
+    axios.delete(`${this.props.url}/`+id)
+      .catch(err => {
+        console.log(err);
       })
   }
 
@@ -50,7 +64,9 @@ class CommentBox extends Component {
     return(
       <div style={style.commentBox}>
         <h2>Comments:</h2>
-        <CommentList data={this.state.data} />
+        <CommentList data={this.state.data} 
+                     handleUpdate={this.handleUpdate} 
+                     handleDelete={this.handleDelete} />
         <CommentForm onCommentSubmit={this.handleCommentSubmit} />
       </div>
     );

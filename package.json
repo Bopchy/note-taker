@@ -18,7 +18,7 @@
   },
   "scripts": {
     "start": " API_PORT=3500 react-scripts start",
-    "start-dev": "nf start -p 3500", // What's happening here?
+    "start-dev": "nf start -p 3500",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
